@@ -1,8 +1,7 @@
 import sqlalchemy as sa
-from sqlalchemy.orm import relationship
-
 from db import Base
 from db.models._shared import CreatedUpdatedMixin, IdentifiedWithIntMixin, IdentifiedWithUuidMixin
+from sqlalchemy.orm import relationship
 
 
 class TextModel(IdentifiedWithIntMixin, IdentifiedWithUuidMixin, CreatedUpdatedMixin, Base):
@@ -12,7 +11,7 @@ class TextModel(IdentifiedWithIntMixin, IdentifiedWithUuidMixin, CreatedUpdatedM
     language_iso_2 = sa.Column(sa.String(2), nullable=True)
     level_cefr_code = sa.Column(sa.String(2), nullable=True)
 
-    user_uuid = sa.Column(sa.UUID(as_uuid=False), sa.ForeignKey('user.uuid', ondelete='CASCADE'),
+    user_uuid = sa.Column(sa.UUID(as_uuid=False), sa.ForeignKey('user.uuid', ondelete='CASCADE', onupdate='CASCADE'),
                           nullable=False)  # creator uuid
 
     user_creator = relationship('UserModel', back_populates='created_texts',

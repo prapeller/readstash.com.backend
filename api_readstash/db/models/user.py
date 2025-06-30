@@ -21,8 +21,8 @@ class UserModel(IdentifiedWithIntMixin, IdentifiedWithUuidMixin, CreatedUpdatedM
     roles = sa.Column(JSONB, nullable=False, server_default=sa.text('\'[]\'::json'))
     external_uuid = sa.Column(sa.String(50), unique=True)
 
-    created_texts = relationship('TextModel', back_populates='user_creator')
-    created_phrases = relationship('PhraseModel', back_populates='user_creator')
+    created_texts = relationship('TextModel', back_populates='user_creator', uselist=True)
+    created_phrases = relationship('PhraseModel', back_populates='user_creator', uselist=True)
 
     def __eq__(self, other):
         return isinstance(other, UserModel) and self.id == other.id and self.email == other.email
