@@ -1,4 +1,4 @@
-ARG PYTHON_VERSION=3.11-slim-bullseye
+ARG PYTHON_VERSION=3.11.0-slim-bullseye
 FROM python:${PYTHON_VERSION} as my_python
 
 FROM my_python as python-build-stage
