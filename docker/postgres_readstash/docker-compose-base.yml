@@ -15,7 +15,7 @@ services:
       retries: 5
     networks:
       - local_network
-      - shared_network
+      - shared_network_readstash
 
   postgres_object_storage_readstash:
     restart: always
@@ -32,10 +32,10 @@ services:
       retries: 5
     networks:
       - local_network
-      - shared_network
+      - shared_network_readstash
 
 networks:
-  shared_network:
+  shared_network_readstash:
     external: true
   local_network:
     driver: bridge

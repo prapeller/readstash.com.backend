@@ -8,7 +8,7 @@ services:
     container_name: prometheus_banner
     networks:
       - local_network
-      - shared_network
+      - shared_network_readstash
     environment:
       - TZ=UTC
 
@@ -23,14 +23,14 @@ services:
       - prometheus
     networks:
       - local_network
-      - shared_network
+      - shared_network_readstash
     environment:
       - TZ=UTC
 
 networks:
   local_network:
     driver: bridge
-  shared_network:
+  shared_network_readstash:
     external: true
 
 volumes:

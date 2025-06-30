@@ -1,16 +1,21 @@
 services:
 
-  celery_worker_readstash:
+  api_readstash:
     build:
       args:
         - BUILD_ENV=local
+    command: /start_api_local.sh
     env_file:
       - ../../.envs/.docker-compose-local/.api_readstash
       - ../../.envs/.docker-compose-local/.postgres_readstash
       - ../../.envs/.docker-compose-local/.postgres_object_storage
       - ../../.envs/.docker-compose-local/.redis_readstash
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
 
-  celery_beat_readstash:
+  celery_worker_readstash:
     build:
       args:
         - BUILD_ENV=local
@@ -32,18 +37,12 @@ services:
     ports:
       - "5555:5555"
 
-
-  api_readstash:
-    build:
-      args:
-        - BUILD_ENV=local
-    command: /start_api_local.sh
-    env_file:
-      - ../../.envs/.docker-compose-local/.api_readstash
-      - ../../.envs/.docker-compose-local/.postgres_readstash
-      - ../../.envs/.docker-compose-local/.postgres_object_storage
-      - ../../.envs/.docker-compose-local/.redis_readstash
-    expose:
-      - "8000"
-    ports:
-      - "8000:8000"
+#  celery_beat_readstash:
+#    build:
+#      args:
+#        - BUILD_ENV=local
+#    env_file:
+#      - ../../.envs/.docker-compose-local/.api_readstash
+#      - ../../.envs/.docker-compose-local/.postgres_readstash
+#      - ../../.envs/.docker-compose-local/.postgres_object_storage
+#      - ../../.envs/.docker-compose-local/.redis_readstash

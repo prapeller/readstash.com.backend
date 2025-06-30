@@ -10,7 +10,7 @@ services:
       - staticfiles_marianmt:/app/api_nlp/staticfiles/marianmt
     networks:
       - local_network_api_nlp
-      - shared_network
+      - shared_network_readstash
     healthcheck:
       test: [ "CMD-SHELL", "curl -H 'X-Request-Id: healthcheck' --fail -f http://$$API_NLP_HOST:$$API_NLP_PORT/$$DOCS_URL" ]
       interval: 10s
@@ -22,7 +22,7 @@ services:
 networks:
   local_network_api_nlp:
     driver: bridge
-  shared_network:
+  shared_network_readstash:
     external: true
 
 volumes:

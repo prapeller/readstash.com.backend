@@ -9,7 +9,7 @@ services:
     volumes:
       - postgres_keycloak_readstash_data_vol:/var/lib/postgresql/data
     networks:
-      - shared_network
+      - shared_network_readstash
       - local_network
 
   keycloak:
@@ -26,11 +26,11 @@ services:
       timeout: 60s
       retries: 5
     networks:
-      - shared_network
+      - shared_network_readstash
       - local_network
 
 networks:
-  shared_network:
+  shared_network_readstash:
     external: true
   local_network:
     driver: bridge

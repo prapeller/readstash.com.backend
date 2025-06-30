@@ -11,9 +11,9 @@ services:
       timeout: 10s
       retries: 5
     networks:
-      - shared_network
+      - shared_network_readstash
 
 
 networks:
-  shared_network:
+  shared_network_readstash:
     external: true
