@@ -86,20 +86,15 @@ down-v-prod:
 
 
 
-keycloak-readstash-build-loc:
-	docker network create shared_network || true
-	docker-compose -p postgres_readstash $(POSTGRES_READSTASH_BASE) $(POSTGRES_READSTASH_LOCAL) up --build -d --remove-orphans
-	docker-compose -p keycloak_readstash $(KEYCLOAK_BASE) $(KEYCLOAK_LOCAL) up --build -d --remove-orphans
+keycloak-build-loc:
+	docker compose -p keycloak $(KEYCLOAK_SERP_BASE) $(KEYCLOAK_SERP_LOCAL) up --build -d --remove-orphans --no-deps
 
-keycloak-readstash-down-loc:
-	docker network create shared_network || true
-	docker-compose -p postgres_readstash $(POSTGRES_READSTASH_BASE) $(POSTGRES_READSTASH_LOCAL) down
-	docker-compose -p keycloak_readstash $(KEYCLOAK_BASE) $(KEYCLOAK_LOCAL) down
+keycloak-down-loc:
+	docker compose -p keycloak $(KEYCLOAK_SERP_BASE) $(KEYCLOAK_SERP_LOCAL) down
 
-keycloak-readstash-down-v-loc:
-	docker network create shared_network || true
-	docker-compose -p postgres_readstash $(POSTGRES_READSTASH_BASE) $(POSTGRES_READSTASH_LOCAL) down -v
-	docker-compose -p keycloak_readstash $(KEYCLOAK_BASE) $(KEYCLOAK_LOCAL) down -v
+keycloak-down-v-loc:
+	docker compose -p keycloak $(KEYCLOAK_SERP_BASE) $(KEYCLOAK_SERP_LOCAL) down -v
+
 
 
 
