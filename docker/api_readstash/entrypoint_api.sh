@@ -4,7 +4,19 @@ set -o errexit # if any command fails any reason, script fails
 set -o pipefail # if none of of you pipecommand fails, exit fails
 set -o nounset # if none of variables set, exit
 
+# WAIT FOR API NLP
+api_nlp_ready(){
+   nc -z ${API_NLP_HOST} ${API_NLP_PORT}
+}
 
+until api_nlp_ready; do
+   >&2 echo "Waiting for API_NLP at ${API_NLP_HOST}:${API_NLP_PORT} to become available... 8-(("
+   sleep 1
+done
+>&2 echo "API_NLP is ready!!! 8-))"
+
+
+# WAIT FOR REDIS
 redis_ready(){
    nc -z ${REDIS_HOST} ${REDIS_PORT}
 }
@@ -16,6 +28,7 @@ done
 >&2 echo "Redis is ready!!! 8-))"
 
 
+# WAIT FOR POSTGRES
 postgres_readstash_ready() {
 python3 << END
 import sys
@@ -34,13 +47,14 @@ sys.exit(0)
 END
 }
 
-
 until postgres_readstash_ready; do
 >&2 echo "Waiting for PostgreSQL db at(${POSTGRES_READSTASH_HOST}:${POSTGRES_READSTASH_PORT}) to become available... 8-(("
 sleep 1
 done
 >&2 echo "PostgreSQL is ready!!! 8-))"
 
+
+# WAIT FOR OBJECT_STORAGE
 object_storage_ready() {
 python3 << END
 import sys
@@ -66,6 +80,7 @@ done
 >&2 echo "ObjectStorage is ready!!! 8-))"
 
 
+# WAIT FOR KEYCLOAK
 keycloak_ready() {
     response=$(curl --write-out "%{http_code}" --location --silent --output /dev/null "$KEYCLOAK_BASE_URL")
     if [ "$response" -eq 200 ]; then

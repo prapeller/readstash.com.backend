@@ -31,3 +31,10 @@ def import_celery_tasks_from_services():
 
 
 import_celery_tasks_from_services()
+
+if __name__ == '__main__':
+    debug_worker = celery_app.Worker(
+        pool="solo",
+        loglevel="info",
+    )
+    debug_worker.start()

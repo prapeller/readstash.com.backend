@@ -11,6 +11,11 @@ fi
 tmux start-server
 tmux new-session -d -s $session
 
+# keycloak, redis, postgres containers
+tmux send-keys "make keycloak-readstash-build-loc" C-m
+tmux send-keys "make redis-readstash-build-loc" C-m
+tmux send-keys "make postgres-readstash-build-loc" C-m
+
 # environment variables and entrypoint
 tmux send-keys "source ./export_local_envs.sh" C-m
 tmux send-keys "cd api_readstash" C-m

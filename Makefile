@@ -14,9 +14,9 @@ PROM_GRAF_BASE := -f ./docker/prometheus_grafana/docker-compose-base.yml
 PROM_GRAF_LOCAL := -f ./docker/prometheus_grafana/docker-compose-local.yml
 PROM_GRAF_PROD := -f ./docker/prometheus_grafana/docker-compose-prod.yml
 
-KEYCLOAK_BASE := -f ./docker/keycloak_readstash/docker-compose-base.yml
-KEYCLOAK_LOCAL := -f ./docker/keycloak_readstash/docker-compose-local.yml
-KEYCLOAK_PROD := -f ./docker/keycloak_readstash/docker-compose-prod.yml
+KEYCLOAK_READSTASH_BASE := -f ./docker/keycloak_readstash/docker-compose-base.yml
+KEYCLOAK_READSTASH_LOCAL := -f ./docker/keycloak_readstash/docker-compose-local.yml
+KEYCLOAK_READSTASH_PROD := -f ./docker/keycloak_readstash/docker-compose-prod.yml
 
 REDIS_READSTASH_BASE := -f ./docker/redis_readstash/docker-compose-base.yml
 REDIS_READSTASH_LOCAL := -f ./docker/redis_readstash/docker-compose-local.yml
@@ -32,16 +32,16 @@ RABBITMQ_READSTASH_PROD := -f ./docker/rabbitmq_readstash/docker-compose-prod.ym
 
 
 build-loc:
-	docker network create shared_network || true
-	docker-compose -p keycloak_readstash $(KEYCLOAK_BASE) $(KEYCLOAK_LOCAL) up --build -d --remove-orphans
+	docker network create shared_network_readstash || true
+	docker-compose -p keycloak_readstash $(KEYCLOAK_READSTASH_BASE) $(KEYCLOAK_READSTASH_LOCAL) up --build -d --remove-orphans
 	docker-compose -p postgres_readstash $(POSTGRES_READSTASH_BASE) $(POSTGRES_READSTASH_LOCAL) up --build -d --remove-orphans
-	docker-compose -p api_readstash $(API_READSTASH_BASE) $(API_READSTASH_LOCAL) up --build -d --remove-orphans
-	docker-compose -p api_nlp $(API_NLP_BASE) $(API_NLP_LOCAL) up --build -d --remove-orphans
 	docker-compose -p redis_readstash $(REDIS_READSTASH_BASE) $(REDIS_READSTASH_LOCAL) up --build -d --remove-orphans
 	docker-compose -p rabbitmq_readstash $(RABBITMQ_READSTASH_BASE) $(RABBITMQ_READSTASH_LOCAL) up --build -d --remove-orphans
+	docker-compose -p api_readstash $(API_READSTASH_BASE) $(API_READSTASH_LOCAL) up --build -d --remove-orphans
+	docker-compose -p api_nlp $(API_NLP_BASE) $(API_NLP_LOCAL) up --build -d --remove-orphans
 
 down-loc:
-	docker-compose -p keycloak_readstash $(KEYCLOAK_BASE) $(KEYCLOAK_LOCAL) down
+	docker-compose -p keycloak_readstash $(KEYCLOAK_READSTASH_BASE) $(KEYCLOAK_READSTASH_LOCAL) down
 	docker-compose -p postfix_readstash $(POSTFIX_READSTASH_BASE) $(POSTFIX_READSTASH_LOCAL) down
 	docker-compose -p postgres_readstash $(POSTGRES_READSTASH_BASE) $(POSTGRES_READSTASH_LOCAL) down
 	docker-compose -p api_readstash $(API_READSTASH_BASE) $(API_READSTASH_LOCAL) down
@@ -50,56 +50,57 @@ down-loc:
 	docker-compose -p rabbitmq_readstash $(RABBITMQ_READSTASH_BASE) $(RABBITMQ_READSTASH_LOCAL) down
 
 down-v-loc:
-	docker-compose -p keycloak_readstash $(KEYCLOAK_BASE) $(KEYCLOAK_LOCAL) down -v
+	docker-compose -p keycloak_readstash $(KEYCLOAK_READSTASH_BASE) $(KEYCLOAK_READSTASH_LOCAL) down -v
 	docker-compose -p postfix_readstash $(POSTFIX_READSTASH_BASE) $(POSTFIX_READSTASH_LOCAL) down -v
 	docker-compose -p postgres_readstash $(POSTGRES_READSTASH_BASE) $(POSTGRES_READSTASH_LOCAL) down -v
 	docker-compose -p api_readstash $(API_READSTASH_BASE) $(API_READSTASH_LOCAL) down -v
 	docker-compose -p redis_readstash $(REDIS_READSTASH_BASE) $(REDIS_READSTASH_LOCAL) down -v
+	docker-compose -p rabbitmq_readstash $(RABBITMQ_READSTASH_BASE) $(RABBITMQ_READSTASH_LOCAL) down -v
 
 
 
 build-prod:
-	docker network create shared_network || true
-	docker-compose -p keycloak_readstash $(KEYCLOAK_BASE) $(KEYCLOAK_LOCAL) build
+	docker network create shared_network_readstash || true
+	docker-compose -p keycloak_readstash $(KEYCLOAK_READSTASH_BASE) $(KEYCLOAK_READSTASH_PROD) build
 	docker-compose -p postgres_readstash $(POSTGRES_READSTASH_BASE) $(POSTGRES_READSTASH_PROD) build
 	docker-compose -p api_readstash $(API_READSTASH_BASE) $(API_READSTASH_PROD) build
 	docker-compose -p redis_readstash $(REDIS_READSTASH_BASE) $(REDIS_READSTASH_PROD) build
 
 run-prod:
-	docker network create shared_network || true
-	docker-compose -p keycloak_readstash $(KEYCLOAK_BASE) $(KEYCLOAK_LOCAL) up -d --remove-orphans
+	docker network create shared_network_readstash || true
+	docker-compose -p keycloak_readstash $(KEYCLOAK_READSTASH_BASE) $(KEYCLOAK_READSTASH_PROD) up -d --remove-orphans
 	docker-compose -p postgres_readstash $(POSTGRES_READSTASH_BASE) $(POSTGRES_READSTASH_PROD) up -d --remove-orphans
 	docker-compose -p api_readstash $(API_READSTASH_BASE) $(API_READSTASH_PROD) up -d --remove-orphans
 	docker-compose -p redis_readstash $(REDIS_READSTASH_BASE) $(REDIS_READSTASH_PROD) up -d --remove-orphans
 
 down-prod:
-	docker-compose -p keycloak_readstash $(KEYCLOAK_BASE) $(KEYCLOAK_LOCAL) down
+	docker-compose -p keycloak_readstash $(KEYCLOAK_READSTASH_BASE) $(KEYCLOAK_READSTASH_PROD) down
 	docker-compose -p postgres_readstash $(POSTGRES_READSTASH_BASE) $(POSTGRES_READSTASH_PROD) down
 	docker-compose -p api_readstash $(API_READSTASH_BASE) $(API_READSTASH_PROD) down
 	docker-compose -p redis_readstash $(REDIS_READSTASH_BASE) $(REDIS_READSTASH_PROD) down
 
 down-v-prod:
-	docker-compose -p keycloak_readstash $(KEYCLOAK_BASE) $(KEYCLOAK_LOCAL) down -v
+	docker-compose -p keycloak_readstash $(KEYCLOAK_READSTASH_BASE) $(KEYCLOAK_READSTASH_PROD) down -v
 	docker-compose -p postgres_readstash $(POSTGRES_READSTASH_BASE) $(POSTGRES_READSTASH_PROD) down -v
 	docker-compose -p api_readstash $(API_READSTASH_BASE) $(API_READSTASH_PROD) down -v
 	docker-compose -p redis_readstash $(REDIS_READSTASH_BASE) $(REDIS_READSTASH_PROD) down -v
 
 
 
-keycloak-build-loc:
-	docker compose -p keycloak $(KEYCLOAK_SERP_BASE) $(KEYCLOAK_SERP_LOCAL) up --build -d --remove-orphans --no-deps
+keycloak-readstash-build-loc:
+	docker compose -p keycloak $(KEYCLOAK_READSTASH_BASE) $(KEYCLOAK_READSTASH_LOCAL) up --build -d --remove-orphans --no-deps
 
-keycloak-down-loc:
-	docker compose -p keycloak $(KEYCLOAK_SERP_BASE) $(KEYCLOAK_SERP_LOCAL) down
+keycloak-readstash-down-loc:
+	docker compose -p keycloak $(KEYCLOAK_READSTASH_BASE) $(KEYCLOAK_READSTASH_LOCAL) down
 
-keycloak-down-v-loc:
-	docker compose -p keycloak $(KEYCLOAK_SERP_BASE) $(KEYCLOAK_SERP_LOCAL) down -v
+keycloak-readstash-down-v-loc:
+	docker compose -p keycloak $(KEYCLOAK_READSTASH_BASE) $(KEYCLOAK_READSTASH_LOCAL) down -v
 
 
 
 
 api-readstash-build-loc:
-	docker network create shared_network || true
+	docker network create shared_network_readstash || true
 	docker-compose -p api_readstash $(API_READSTASH_BASE) $(API_READSTASH_LOCAL) up --build -d --remove-orphans
 
 api-readstash-down-loc:
@@ -108,7 +109,7 @@ api-readstash-down-loc:
 
 
 api-nlp-build-loc:
-	docker network create shared_network || true
+	docker network create shared_network_readstash || true
 	docker-compose -p api_nlp $(API_NLP_BASE) $(API_NLP_LOCAL) up --build -d --remove-orphans
 
 api-nlp-down-loc:
@@ -117,7 +118,7 @@ api-nlp-down-loc:
 
 
 postfix-readstash-build-loc:
-	docker network create shared_network || true
+	docker network create shared_network_readstash || true
 	docker-compose -p postfix_readstash $(POSTFIX_READSTASH_BASE) $(POSTFIX_READSTASH_LOCAL) up --build -d --remove-orphans
 
 postfix-readstash-down-loc:
@@ -129,7 +130,7 @@ postfix-readstash-down-v-loc:
 
 
 redis-readstash-build-loc:
-	docker network create shared_network || true
+	docker network create shared_network_readstash || true
 	docker-compose -p redis_readstash $(REDIS_READSTASH_BASE) $(REDIS_READSTASH_LOCAL) up --build -d --remove-orphans
 
 redis-readstash-down-loc:
@@ -138,7 +139,7 @@ redis-readstash-down-loc:
 
 
 rabbit-readstash-build-loc:
-	docker network create shared_network || true
+	docker network create shared_network_readstash || true
 	docker-compose -p rabbitmq_readstash $(RABBITMQ_READSTASH_BASE) $(RABBITMQ_READSTASH_LOCAL) up --build -d --remove-orphans
 
 rabbit-readstash-down-loc:
@@ -147,7 +148,7 @@ rabbit-readstash-down-loc:
 
 
 postgres-readstash-build-loc:
-	docker network create shared_network || true
+	docker network create shared_network_readstash || true
 	docker-compose -p postgres_readstash $(POSTGRES_READSTASH_BASE) $(POSTGRES_READSTASH_LOCAL) up --build -d --remove-orphans
 
 postgres-readstash-down-loc:
